@@ -1,0 +1,34 @@
+jdk:
+  - openjdk17
+
+before_install:
+  - |
+    export PREFIX=$HOME/local
+    export PATH=$PREFIX/bin:$PATH
+    mkdir -p $PREFIX
+    echo "=== Installing autotools to $PREFIX ==="
+    curl -fsSL http://ftp.gnu.org/gnu/m4/m4-1.4.19.tar.gz | tar xz
+    cd m4-1.4.19 && ./configure --prefix=$PREFIX -q && make -j$(nproc) && make install && cd ..
+    curl -fsSL http://ftp.gnu.org/gnu/autoconf/autoconf-2.71.tar.gz | tar xz
+    cd autoconf-2.71 && ./configure --prefix=$PREFIX -q && make -j$(nproc) && make install && cd ..
+    curl -fsSL http://ftp.gnu.org/gnu/automake/automake-1.16.5.tar.gz | tar xz
+    cd automake-1.16.5 && ./configure --prefix=$PREFIX -q && make -j$(nproc) && make install && cd ..
+    curl -fsSL http://ftp.gnu.org/gnu/libtool/libtool-2.4.7.tar.gz | tar xz
+    cd libtool-2.4.7 && ./configure --prefix=$PREFIX -q && make -j$(nproc) && make install && cd ..
+    echo "=== autotools installed ==="
+    autoconf --version | head -1
+    automake --version | head -1
+    libtool --version | head -1
+  - yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+  - $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;28.0.12674087"
+
+env:
+  JITPACK: "true"
+
+install:
+  - |
+    export PATH=$HOME/local/bin:$PATH
+    export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/28.0.12674087
+    echo "ANDROID_NDK_ROOT=$ANDROID_NDK_ROOT"
+    cat "$ANDROID_NDK_ROOT/source.properties"
+    cd kotlin && ./gradlew :denoise-filter:publishToMavenLocal -xtest -xlint
