@@ -46,7 +46,23 @@ cd "$DF_DIR"
 CARGO_TOML="$DF_DIR/Cargo.toml"
 CARGO_TOML_BAK="$CARGO_TOML.bak"
 cp "$CARGO_TOML" "$CARGO_TOML_BAK"
-sed -i '' 's/crate-type = \["cdylib", "rlib", "staticlib"\]/crate-type = ["staticlib"]/' "$CARGO_TOML"
+export CARGO_TOML
+python3 - <<'PY'
+from pathlib import Path
+import os
+import sys
+
+path = Path(os.environ["CARGO_TOML"])
+text = path.read_text()
+old = 'crate-type = ["cdylib", "rlib", "staticlib"]'
+new = 'crate-type = ["staticlib"]'
+
+if old not in text:
+    sys.stderr.write('Error: expected crate-type declaration not found in {}\n'.format(path))
+    sys.exit(1)
+
+path.write_text(text.replace(old, new, 1))
+PY
 
 restore_cargo_toml() {
     [ -f "$CARGO_TOML_BAK" ] && mv "$CARGO_TOML_BAK" "$CARGO_TOML"
@@ -65,6 +81,7 @@ for ((i=0; i<${#RUST_TARGETS[@]}; i++)); do
         --platform 21 \
         -- build \
         --profile release-lto \
+        --locked \
         --lib \
         --features "capi,default-model"
 

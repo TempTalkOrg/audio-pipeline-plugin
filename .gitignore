@@ -26,8 +26,3 @@ libs
 libs_df
 build_cmake_*
 .codex
-
-# Keep kotlin/libs contents tracked in git
-!kotlin/libs/
-!kotlin/libs/**/
-!kotlin/libs/.gitkeep

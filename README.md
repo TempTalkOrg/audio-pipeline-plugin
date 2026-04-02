@@ -28,5 +28,5 @@ maven {
     url = uri("https://raw.githubusercontent.com/difftim/AndroidRepo/main/")
 }
 
-implementation("org.difft.android.libraries:audio-pipeline:1.0.12")
+implementation("com.github.TempTalkOrg:audio-pipeline:1.0.12")
 ```
