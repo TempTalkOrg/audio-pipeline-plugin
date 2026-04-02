@@ -26,3 +26,9 @@ libs
 libs_df
 build_cmake_*
 .codex
+
+# Track kotlin/libs prebuilts (override generic `libs` and *.so)
+!kotlin/libs/
+!kotlin/libs/**/
+!kotlin/libs/**/*.so
+!kotlin/libs/.gitkeep

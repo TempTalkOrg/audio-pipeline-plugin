@@ -69,7 +69,7 @@ echo "============================"
 echo "Step 3: Building libaudio_pipeline.so..."
 echo "============================"
 
-ABIS=("arm64-v8a" "armeabi-v7a" "x86" "x86_64")
+ABIS=("arm64-v8a" "armeabi-v7a")
 
 CMAKE_TOOLCHAIN="$ANDROID_NDK_ROOT/build/cmake/android.toolchain.cmake"
 

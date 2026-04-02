@@ -45,25 +45,19 @@ USE_LITE=1
 ARCHS=(
     "aarch64-linux-android"
     "armv7a-linux-androideabi"
-    "i686-linux-android"
-    "x86_64-linux-android"
 )
 ABIS=(
     "arm64-v8a"
     "armeabi-v7a"
-    "x86"
-    "x86_64"
 )
 CONFIGURE_FLAGS=(
-    ""
-    ""
     ""
     ""
 )
 
 OUTPUT_DIR="$SCRIPT_DIR/libs"
 mkdir -p "$OUTPUT_DIR"
-for ABI_DIR in arm64-v8a armeabi-v7a x86 x86_64; do
+for ABI_DIR in arm64-v8a armeabi-v7a; do
     mkdir -p "$OUTPUT_DIR/$ABI_DIR"
 done
 

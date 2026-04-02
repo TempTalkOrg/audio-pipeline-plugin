@@ -18,14 +18,10 @@ fi
 RUST_TARGETS=(
     "aarch64-linux-android"
     "armv7-linux-androideabi"
-    "i686-linux-android"
-    "x86_64-linux-android"
 )
 ABIS=(
     "arm64-v8a"
     "armeabi-v7a"
-    "x86"
-    "x86_64"
 )
 
 for target in "${RUST_TARGETS[@]}"; do

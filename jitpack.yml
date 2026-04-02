@@ -28,7 +28,7 @@ before_install:
     . "$HOME/.cargo/env"
     rustc --version
     cargo --version
-    rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+    rustup target add aarch64-linux-android armv7-linux-androideabi
     cargo install cargo-ndk --locked
     cargo ndk --version
   - |
