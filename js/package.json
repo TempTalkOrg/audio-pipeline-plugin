@@ -1,0 +1,77 @@
+{
+    "name": "@cc-livekit/audio-pipeline-plugin",
+    "description": "A WebAssembly audio pipeline module for RNNoise and DeepFilterNet on web frontends.",
+    "version": "1.1.7",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/difftim/denoise-plugin.git"
+    },
+    "scripts": {
+        "build": "npm run build:rnnoise:wasm && npm run build:deepfilter:wasm && npm run build:js",
+        "clean:dist": "node ./scripts/clean-dist.mjs",
+        "lint": "publint",
+        "build:dockerimage": "docker image inspect -f '.' emscripten-autotools-4.0.4 || docker build -t emscripten-autotools-4.0.4 .",
+        "build:emscripten": "docker run --rm -v $(pwd)/../:/src emscripten-autotools-4.0.4 bash -x ./js/build.sh",
+        "build:rnnoise:wasm": "npm run build:dockerimage && npm run build:emscripten",
+        "build:deepfilter:wasm": "cd ../DeepFilterNet && ./scripts/build_wasm_package.sh",
+        "build:deepfilter:artifacts": "node ./scripts/build-deepfilter-artifacts.mjs",
+        "build:worklet": "webpack --config webpack.worklet.config.js",
+        "build:rollup": " rollup -c rollup.config.cjs",
+        "build:js": "npm run clean:dist && npm run build:deepfilter:artifacts && npm run build:worklet && npm run build:rollup"
+    },
+    "files": [
+        "dist/AudioPipelineWorklet.js",
+        "dist/AudioPipelineWorker.js",
+        "dist/rnnoise.wasm",
+        "dist/deepfilter.wasm",
+        "dist/index.js",
+        "dist/index.cjs",
+        "dist/index.umd.js",
+        "dist/index.d.ts",
+        "dist/AudioPipelineTrackProcessor.d.ts",
+        "dist/options.d.ts",
+        "README.md"
+    ],
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs",
+            "default": "./dist/index.js"
+        },
+        "./AudioPipelineWorklet.js": {
+            "default": "./dist/AudioPipelineWorklet.js"
+        },
+        "./AudioPipelineWorker.js": {
+            "default": "./dist/AudioPipelineWorker.js"
+        }
+    },
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^28.0.2",
+        "@rollup/plugin-node-resolve": "^16.0.0",
+        "@rollup/plugin-replace": "^6.0.2",
+        "@rollup/plugin-terser": "^0.4.4",
+        "@types/audioworklet": "^0.0.56",
+        "@types/emscripten": "^1.39.13",
+        "livekit-client": "^2.8.1",
+        "publint": "^0.2.8",
+        "rollup": "^4.34.9",
+        "rollup-plugin-typescript2": "^0.36.0",
+        "ts-loader": "^9.5.2",
+        "typescript": "^5.5.2",
+        "webpack": "^5.98.0",
+        "webpack-cli": "^6.0.1"
+    },
+    "licenses": [
+        {
+            "type": "Apache-2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    ],
+    "publishConfig": {
+        "access": "public"
+    }
+}

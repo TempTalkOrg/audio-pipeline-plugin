@@ -1,0 +1,6 @@
+{
+    global:
+        Java_com_github_TempTalkOrg_audio_1pipeline_AudioPipelineProcessor_*;
+    local:
+        *;
+};
